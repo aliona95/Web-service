@@ -8,6 +8,6 @@ RUN ["mvn", "verify"]
 COPY src /code/src
 RUN ["mvn", "package"]
 
-EXPOSE 1234
-CMD ["java", "-jar", "target/simpleRest-1.0-jar-with-dependencies.jar"]
+EXPOSE 4321
+CMD ["java", "-jar", "target/people-1.0-jar-with-dependencies.jar"]
 

@@ -1,12 +1,10 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 /**
  * Created by Aliona and Eimantas
  */
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class Data {
     private Map<Integer, Person> people = new HashMap<>();
 
@@ -27,5 +25,26 @@ public class Data {
     }
     public List<Person> getAll(){
         return people.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+    }
+    public void addPerson(Person person){
+        people.put(person.getId(), person);
+    }
+    public void removePerson(int id){
+        people.remove(id);
+    }
+
+    public void update(Integer id, Person person) {
+        person.setId(id);
+        people.put(id, person);
+    }
+    public List<Person> findByName(String name){
+        return people.entrySet().stream().filter(
+                (entry) -> entry.getValue().getName().equals(name)
+        ).map(Map.Entry::getValue).collect(Collectors.toList());
+    }
+    public List<Person> findByGender(String gender){
+        return people.entrySet().stream().filter(
+                (entry) -> entry.getValue().getGender().equals(gender)
+        ).map(Map.Entry::getValue).collect(Collectors.toList());
     }
 }

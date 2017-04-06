@@ -17,15 +17,15 @@ docker run -d -p 80:4321 people:1
 # Pavyzdiniai Duomenys
 {
 
-   "id":1,
+      "id":1,
    
-   "name":"Petras",
+      "name":"Petras",
    
-   "surname":"Petraitis",
+      "surname":"Petraitis",
    
-   "gender":"male",
+      "gender":"male",
    
-   "address":"Ikalnes 45"
+      "address":"Ikalnes 45"
    
 }
 

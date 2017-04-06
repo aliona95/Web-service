@@ -14,7 +14,7 @@ docker run -d -p 80:4321 people:1
 
 /people/gender//male GET
 
-# Pavyzdiniai Duomenys
+# Pavyzdiniai duomenys
 {
 
       "id":1,

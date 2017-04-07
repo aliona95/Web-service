@@ -26,10 +26,18 @@ public class Controller {
         }
     }
     public static Object addPerson(Request request, Response response, Data data){
-        Gson gson = new Gson();
-        Person temp = gson.fromJson(request.body(), Person.class);
-        data.addPerson(temp);
-        return "Sekmingai pridetas";
+        try {
+            Gson gson = new Gson();
+            Person temp = gson.fromJson(request.body(), Person.class);
+            if (temp == null) {
+                throw new Exception("Nenurodyti duomenys");
+            }
+            data.addPerson(temp);
+            return "Sekmingai pridetas";
+        }catch (Exception e){
+            response.status(HTTP_NOT_FOUND);
+            return e.getMessage();
+        }
     }
 
     public static Object deletePerson(Request request, Response response, Data data){

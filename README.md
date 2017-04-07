@@ -8,11 +8,11 @@ docker run -d -p 80:4321 people:1
 # Komandos
 /people GET, PUT
 
-/people/1 GET, POST, DELETE
+/people/{id} GET, POST, DELETE
 
-/people/name//Petras GET
+/people/name//{name} GET
 
-/people/gender//male GET
+/people/gender//{gender} GET
 
 # Pavyzdiniai duomenys
 {

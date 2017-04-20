@@ -72,7 +72,6 @@ public class JsonTransformer implements ResponseTransformer {
 
             pointer.put(keys[keys.length - 1], value);
         }
-
         return map;
     }
 }

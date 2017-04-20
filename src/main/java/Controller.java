@@ -6,13 +6,20 @@ import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 
+import java.util.List;
+
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 public class Controller {
 
     public static Object getAllPeople(Request request, Response response, Data data){
-        return data.getAll();
+        List<Person> people = data.getAll();
+        if(people.size() == 0){
+            response.status(HTTP_NOT_FOUND);
+            return "Asmenu nera";
+        }
+        return people;
     }
 
     public static Object getPerson(Request request, Response response, Data data){
@@ -54,7 +61,6 @@ public class Controller {
     public static  Object updatePerson(Request request, Response response, Data data){
         boolean notFound = false;
         try {
-
             Person person = JsonTransformer.fromJson(request.body(), Person.class);
             int id = Integer.valueOf(request.params("id"));
             if(!data.checkIdExists(id)){
@@ -73,14 +79,28 @@ public class Controller {
                 return new ErrorMessage("Nepavyko rasti vartotojo su id: " + request.params("id"));
             }
             response.status(HTTP_BAD_REQUEST);
-            return new ErrorMessage(e.getMessage());
+            return new ErrorMessage(e.getMessage()); //jei uzklausoje klaida
         }
     }
 
     public static Object getByName(Request request, Response response, Data data){
-        return data.findByName(request.params("name"));
+        List<Person> people = data.findByName(request.params("name"));
+        if(people.size() == 0){
+            response.status(HTTP_NOT_FOUND);
+            return "Nera tokio asmens su tokiu vardu";
+        }
+        return people;
     }
     public static Object getPeopleByGender(Request request, Response response, Data data){
-        return data.findByGender(request.params("gender"));
+        List<Person> people = data.findByGender(request.params("gender"));
+        if(request.params("gender").equals("male") || (request.params("gender").equals("female"))){
+            if(people.size() == 0){
+                response.status(HTTP_NOT_FOUND);
+                return "Nera tokios lyties atstovu";
+            }
+            return people;
+        }
+        response.status(HTTP_BAD_REQUEST);
+        return new ErrorMessage("Klaidingai ivesta lytis");
     }
 }

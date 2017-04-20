@@ -22,22 +22,13 @@ public class Controller {
             return person;
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
-            return e.getMessage();
+            return new ErrorMessage("Nepavyko rasti vartotojo su id: "  + request.params("id"));
         }
     }
     public static Object addPerson(Request request, Response response, Data data){
-        try {
-            Gson gson = new Gson();
-            Person temp = gson.fromJson(request.body(), Person.class);
-            if (temp == null) {
-                throw new Exception("Nenurodyti duomenys");
-            }
-            data.addPerson(temp);
-            return "Sekmingai pridetas";
-        }catch (Exception e){
-            response.status(HTTP_NOT_FOUND);
-            return e.getMessage();
-        }
+        Person person = JsonTransformer.fromJson(request.body(), Person.class);
+        data.addPerson(person);
+        return  "OK";
     }
 
     public static Object deletePerson(Request request, Response response, Data data){
@@ -46,14 +37,13 @@ public class Controller {
             return "Asmuo sekmingai istrintas";
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
-            return "Su tokiu id asmuo neegzistuoja";
+            return  new ErrorMessage("Nepavyko rasti vartotojo su id: " + request.params("id"));
         }
     }
 
     public static  Object updatePerson(Request request, Response response, Data data){
         try{
-            Gson gson = new Gson();
-            Person person = gson.fromJson(request.body(), Person.class);
+            Person person = JsonTransformer.fromJson(request.body(), Person.class);
             data.update(Integer.valueOf(request.params("id")), person);
             return "Sekmingai atnaujinta";
         }catch (Exception e){

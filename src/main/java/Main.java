@@ -9,10 +9,50 @@ import static spark.Spark.*;
 public class Main {
     public static void main(String[] args) {
         Data data = new Data();
-        Gson gson = new Gson();
 
         port(4321);
 
+        path("/people", () -> {
+            get("", (req, res) -> {
+                return Controller.getAllPeople(req, res, data);
+            } , new JsonTransformer());
+
+            get("/:id", (req, res) -> {
+                return Controller.getPerson(req, res, data);
+            } , new JsonTransformer());
+
+            get("/name/:name", (req, res) -> {
+                return Controller.getByName(req, res, data);
+            } , new JsonTransformer());
+
+            get("/gender/:gender", (req, res) -> {
+                return Controller.getPeopleByGender(req, res, data);
+            } , new JsonTransformer());
+
+            post("", (req, res) -> {
+                return Controller.addPerson(req, res, data);
+            } , new JsonTransformer());
+
+            put("/:id", (req, res) -> {
+                return Controller.updatePerson(req, res, data);
+            } , new JsonTransformer());
+
+            delete("/:id", (req, res) -> {
+                return Controller.deletePerson(req, res, data);
+            } , new JsonTransformer());
+
+
+        });
+
+        exception(Exception.class, (e, req, res) -> {
+            res.status(HTTP_BAD_REQUEST);
+            JsonTransformer jsonTransformer = new JsonTransformer();
+            res.body(jsonTransformer.render(new ErrorMessage(e)));
+        });
+
+        after((req, rep) -> rep.type("application/json"));
+
+        /*
         get("/people",(req,res) -> gson.toJson(Controller.getAllPeople(req, res, data)));
         get("/people/:id", (req, res) -> gson.toJson(Controller.getPerson(req, res, data)));
         get("/people/name/:name", (req, res) -> gson.toJson(Controller.getByName(req, res, data)));
@@ -27,5 +67,6 @@ public class Main {
         });
 
         after((req, rep) -> rep.type("application/json"));
+        */
     }
 }

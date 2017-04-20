@@ -27,6 +27,7 @@ public class Data {
         return people.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
     public void addPerson(Person person){
+        person.setId(people.size() + 1);
         people.put(person.getId(), person);
     }
     public void removePerson(int id){

@@ -48,4 +48,18 @@ public class Data {
                 (entry) -> entry.getValue().getGender().equals(gender)
         ).map(Map.Entry::getValue).collect(Collectors.toList());
     }
+    public boolean isPersonValid(Person person) {
+        if (person.getName() == null || person.getSurname() == null || person.getGender() == null || person.getAddress() == null) {
+            return false;
+        }
+        return true;
+    }
+    public boolean checkIdExists(int id){
+        for(Map.Entry<Integer, Person> entry:people.entrySet()){
+            if(entry.getValue().getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
 }

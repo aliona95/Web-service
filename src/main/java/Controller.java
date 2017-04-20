@@ -5,6 +5,8 @@
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
+
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 public class Controller {
@@ -27,12 +29,19 @@ public class Controller {
     }
     public static Object addPerson(Request request, Response response, Data data){
         Person person = JsonTransformer.fromJson(request.body(), Person.class);
-        data.addPerson(person);
-        return  "OK";
+        if (data.isPersonValid(person)) {
+            data. addPerson(person);
+            return "Sekmingai prideta";
+        }
+        response.status(HTTP_BAD_REQUEST);
+        return new ErrorMessage("Klaidingi duomenys");
     }
 
     public static Object deletePerson(Request request, Response response, Data data){
         try{
+            if(!data.checkIdExists(Integer.valueOf(request.params("id")))){
+                throw new Exception("Nepavyko rasti vartotjo su id");
+            }
             data.removePerson(Integer.valueOf(request.params("id")));
             return "Asmuo sekmingai istrintas";
         }catch (Exception e){
@@ -42,13 +51,21 @@ public class Controller {
     }
 
     public static  Object updatePerson(Request request, Response response, Data data){
-        try{
+        try {
             Person person = JsonTransformer.fromJson(request.body(), Person.class);
-            data.update(Integer.valueOf(request.params("id")), person);
-            return "Sekmingai atnaujinta";
-        }catch (Exception e){
+            int id = Integer.valueOf(request.params("id"));
+            if(!data.checkIdExists(id)){
+                throw new Exception("Nepavyko rasti vartotjo su id");
+            }
+            if (data.isPersonValid(person)){
+                data.update(id, person);
+                return "OK";
+            }
+            response.status(HTTP_BAD_REQUEST);
+            return new ErrorMessage("Klaidingi duomenys");
+        } catch (Exception e) {
             response.status(HTTP_NOT_FOUND);
-            return "Su tokiu id asmuo neegzistuoja";
+            return new ErrorMessage("Nepavyko rasti vartotojo su id: " + request.params("id"));
         }
     }
 

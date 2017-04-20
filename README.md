@@ -6,9 +6,9 @@ docker build -t people:1 .
 docker run -d -p 80:4321 people:1
 
 # Komandos
-/people GET, PUT
+/people GET, POST
 
-/people/{id} GET, POST, DELETE
+/people/{id} GET, PUT, DELETE
 
 /people/name//{name} GET
 

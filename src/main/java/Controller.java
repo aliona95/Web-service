@@ -59,12 +59,12 @@ public class Controller {
     }
 
     public static  Object updatePerson(Request request, Response response, Data data){
-        boolean notFound = false;
+       boolean notFound = false;
         try {
             Person person = JsonTransformer.fromJson(request.body(), Person.class);
             int id = Integer.valueOf(request.params("id"));
             if(!data.checkIdExists(id)){
-                notFound = true;
+                //notFound = true;
                 throw new Exception("Nepavyko rasti vartotjo su id");
             }
             if (data.isPersonValid(person)){
@@ -72,7 +72,7 @@ public class Controller {
                 return "Sekmingai atnaujintas";
             }
             response.status(HTTP_BAD_REQUEST);
-            return new ErrorMessage("Klaidingi duomenys");
+            return new ErrorMessage("Truksta " + data.personMissedFields(person));
         } catch (Exception e) {
             if(notFound){
                 response.status(HTTP_NOT_FOUND);

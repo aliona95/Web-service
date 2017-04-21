@@ -26,8 +26,17 @@ public class Data {
     public List<Person> getAll(){
         return people.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
+    public int findMaxID(){
+        int maxId = 0;
+        for(Map.Entry<Integer, Person> entry:people.entrySet()){
+            if(entry.getValue().getId() > maxId){
+                maxId = entry.getValue().getId() ;
+            }
+        }
+        return maxId + 1;
+    }
     public void addPerson(Person person){
-        person.setId(people.size() + 1);
+        person.setId(findMaxID());
         people.put(person.getId(), person);
     }
     public void removePerson(int id){
@@ -53,6 +62,21 @@ public class Data {
             return false;
         }
         return true;
+    }
+    public String personMissedFields(Person person){
+        if(person.getName() == null){
+            return "vardo";
+        }
+        if(person.getSurname()  == null){
+            return "pavardes";
+        }
+        if(person.getGender()  == null){
+            return "lyties";
+        }
+        if(person.getAddress() == null){
+            return "adreso";
+        }
+        return null;
     }
     public boolean checkIdExists(int id){
         for(Map.Entry<Integer, Person> entry:people.entrySet()){

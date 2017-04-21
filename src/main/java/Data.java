@@ -61,6 +61,9 @@ public class Data {
         if (person.getName() == null || person.getSurname() == null || person.getGender() == null || person.getAddress() == null) {
             return false;
         }
+        if (!person.getGender().equals("male") && !person.getGender().equals("female")){
+            return false;
+        }
         return true;
     }
     public String personMissedFields(Person person){
@@ -70,7 +73,7 @@ public class Data {
         if(person.getSurname()  == null){
             return "pavardes";
         }
-        if(person.getGender()  == null){
+        if(person.getGender()  == null || (!person.getGender().equals("male") && !person.getGender().equals("female"))){
             return "lyties";
         }
         if(person.getAddress() == null){

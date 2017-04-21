@@ -36,13 +36,20 @@ public class Controller {
     }
     public static Object addPerson(Request request, Response response, Data data){
         Person person = JsonTransformer.fromJson(request.body(), Person.class);
-        if (data.isPersonValid(person)) {
-            data. addPerson(person);
-            response.header("PATH","/people/" + person.getId());
-            return "Sekmingai prideta";
+        int id = person.getId();
+        if(id == 0){
+            if (data.isPersonValid(person)) {
+                data.addPerson(person);
+                response.header("PATH","/people/" + person.getId());
+                return "Sekmingai prideta";
+            }
+            response.status(HTTP_BAD_REQUEST);
+            return new ErrorMessage("Truksta " + data.personMissedFields(person));
+        }else{
+            response.status(HTTP_BAD_REQUEST);
+            return new ErrorMessage("Nurodete id");
         }
-        response.status(HTTP_BAD_REQUEST);
-        return new ErrorMessage("Klaidingi duomenys");
+
     }
 
     public static Object deletePerson(Request request, Response response, Data data){
@@ -63,16 +70,22 @@ public class Controller {
         try {
             Person person = JsonTransformer.fromJson(request.body(), Person.class);
             int id = Integer.valueOf(request.params("id"));
-            if(!data.checkIdExists(id)){
-                //notFound = true;
-                throw new Exception("Nepavyko rasti vartotjo su id");
+            int id1 = person.getId();
+            if(id1 == 0){
+                if(!data.checkIdExists(id)){
+                    //notFound = true;
+                    throw new Exception("Nepavyko rasti vartotjo su id");
+                }
+                if (data.isPersonValid(person)){
+                    data.update(id, person);
+                    return "Sekmingai atnaujintas";
+                }
+                response.status(HTTP_BAD_REQUEST);
+                return new ErrorMessage("Truksta " + data.personMissedFields(person));
+            }else{
+                response.status(HTTP_BAD_REQUEST);
+                return new ErrorMessage("Nurodete id");
             }
-            if (data.isPersonValid(person)){
-                data.update(id, person);
-                return "Sekmingai atnaujintas";
-            }
-            response.status(HTTP_BAD_REQUEST);
-            return new ErrorMessage("Truksta " + data.personMissedFields(person));
         } catch (Exception e) {
             if(notFound){
                 response.status(HTTP_NOT_FOUND);

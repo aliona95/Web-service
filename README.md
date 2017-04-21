@@ -9,6 +9,8 @@ DockerHub'e:
 
 docker pull eima1995/people:1
 
+docker run -d -p 80:4321 eima1995/people:1
+
 # Komandos
 /people GET, POST
 

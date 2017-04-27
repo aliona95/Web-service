@@ -6,10 +6,19 @@ import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static spark.Spark.get;
+import static spark.Spark.path;
 
 public class Controller {
 
@@ -55,7 +64,7 @@ public class Controller {
     public static Object deletePerson(Request request, Response response, Data data){
         try{
             if(!data.checkIdExists(Integer.valueOf(request.params("id")))){
-                throw new Exception("Nepavyko rasti vartotjo su id");
+                throw new Exception("Nepavyko rasti vartotojo su id");
             }
             data.removePerson(Integer.valueOf(request.params("id")));
             return "Asmuo sekmingai istrintas";
@@ -74,7 +83,7 @@ public class Controller {
             if(id1 == 0){
                 if(!data.checkIdExists(id)){
                     //notFound = true;
-                    throw new Exception("Nepavyko rasti vartotjo su id");
+                    throw new Exception("Nepavyko rasti vartotojo su id");
                 }
                 if (data.isPersonValid(person)){
                     data.update(id, person);
@@ -100,7 +109,7 @@ public class Controller {
         List<Person> people = data.findByName(request.params("name"));
         if(people.size() == 0){
             response.status(HTTP_NOT_FOUND);
-            return "Nera tokio asmens su tokiu vardu";
+            return "Nera asmens su tokiu vardu";
         }
         return people;
     }
@@ -115,5 +124,51 @@ public class Controller {
         }
         response.status(HTTP_BAD_REQUEST);
         return new ErrorMessage("Klaidingai ivesta lytis");
+    }
+
+    public static Object getPersonCompany(Request request, Response response, Data data){
+        try{
+            int id = Integer.valueOf(request.params("id"));
+            Person person = data.getCompany(id);
+
+            if(person == null){
+                throw new Exception("Nerasta asmens");
+            }
+
+            String company = getCompanyData("http://localhost:80/companies/" + id);
+
+            return company;
+        }catch(Exception e){
+            response.status(HTTP_NOT_FOUND);
+            return new ErrorMessage("Nerasta asmens su id " + request.params("id"));
+        }
+    }
+
+    private static String getCompanyData(String url) throws IOException {
+        StringBuilder result = new StringBuilder();
+        URL url1 = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) url1.openConnection();
+        connection.setRequestMethod("GET");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+        while((line = reader.readLine()) != null){
+            result.append(line);
+        }
+        reader.close();
+        return result.toString();
+    }
+
+    public static Object getPeopleByCompany(Request request, Response response, Data data){
+        try {
+            int companyId = Integer.valueOf(request.params("id"));
+            List<Person> people = data.getByCompany(companyId);
+            if(people.size() == 0){
+                throw new Exception("Imoneje niekas nedirba");
+            }
+            return people;
+        }catch (Exception e){
+            response.status(HTTP_NOT_FOUND);
+            return new ErrorMessage("Nerasta imone su id " + request.params("id"));
+        }
     }
 }

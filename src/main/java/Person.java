@@ -7,13 +7,15 @@ public class Person {
     private String surname;
     private String gender;
     private String address;
+    private int companyId;
 
-    Person(int id, String name, String surname, String gender, String address){
+    Person(int id, String name, String surname, String gender, String address, int companyId){
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.gender = gender;
         this.address = address;
+        this.companyId = companyId;
     }
 
     // setters
@@ -32,11 +34,10 @@ public class Person {
     public void setAddress(String address){
         this.address = address;
     }
+    public void setCompanyId(int companyId){this.companyId = companyId;}
 
     // getters
-    public int getId(){
-        return id;
-    }
+    public int getId(){return id;}
     public String getName(){
         return name;
     }
@@ -49,4 +50,5 @@ public class Person {
     public String getAddress(){
         return address;
     }
+    public int getCompanyId(){return companyId;}
 }

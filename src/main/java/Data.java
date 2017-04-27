@@ -10,11 +10,11 @@ public class Data {
 
     Data(){
         List<Person> peopleArray = Arrays.asList(
-            new Person(1, "Petras", "Petraitis", "male", "Ikalnes 45"),
-            new Person(2, "Juozas", "Juozaitis", "male", "Geliu 5"),
-            new Person(3, "Maryte", "Kuodyte", "female", "Pievu 32"),
-            new Person(4, "Stasele", "Stasyte", "female", "Klevu 71"),
-            new Person(5, "Stasys", "Jonaitis", "male", "Siltnamiu 6")
+            new Person(1, "Petras", "Petraitis", "male", "Ikalnes 45", 1),
+            new Person(2, "Juozas", "Juozaitis", "male", "Geliu 5", 1),
+            new Person(3, "Maryte", "Kuodyte", "female", "Pievu 32", 6),
+            new Person(4, "Stasele", "Stasyte", "female", "Klevu 71", 5),
+            new Person(5, "Stasys", "Jonaitis", "male", "Siltnamiu 6", 4)
         );
         peopleArray.forEach(person -> {this.people.put(person.getId(), person);
         });
@@ -26,7 +26,15 @@ public class Data {
     public List<Person> getAll(){
         return people.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
-    public int findMaxID(){
+    public Person getCompany(int id){
+        return people.get(id);
+    }
+    public List<Person> getByCompany(int id){
+        return people.entrySet().stream().filter(
+                (entry) -> entry.getValue().getCompanyId() == id
+        ).map(Map.Entry::getValue).collect(Collectors.toList());
+    }
+    public int findMaxId(){
         int maxId = 0;
         for(Map.Entry<Integer, Person> entry:people.entrySet()){
             if(entry.getValue().getId() > maxId){
@@ -36,7 +44,7 @@ public class Data {
         return maxId + 1;
     }
     public void addPerson(Person person){
-        person.setId(findMaxID());
+        person.setId(findMaxId());
         people.put(person.getId(), person);
     }
     public void removePerson(int id){

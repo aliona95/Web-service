@@ -1,5 +1,5 @@
 /**
- * Created by Aliona and Eimantas on 2017-04-19.
+ * Created by Aliona and Eimantas
  */
 public class ErrorMessage {
     private String message;

@@ -29,6 +29,14 @@ public class Main {
                 return Controller.getPeopleByGender(req, res, data);
             } , new JsonTransformer());
 
+            get("/:id/company", (req, res) ->{
+                return Controller.getPersonCompany(req, res, data);
+            } , new JsonTransformer());
+
+            get("/company/:id", (req, res) -> {
+                return Controller.getPeopleByCompany(req, res, data);
+            } , new JsonTransformer());
+
             post("", (req, res) -> {
                 return Controller.addPerson(req, res, data);
             } , new JsonTransformer());

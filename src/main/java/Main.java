@@ -41,6 +41,9 @@ public class Main {
                 return Controller.addPerson(req, res, data);
             } , new JsonTransformer());
 
+            post("/company", (req, res) -> {
+                return Controller.createCompany(req, res, data);
+            });
             put("/:id", (req, res) -> {
                 return Controller.updatePerson(req, res, data);
             } , new JsonTransformer());

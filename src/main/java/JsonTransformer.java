@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.ResponseTransformer;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -23,7 +25,18 @@ public class JsonTransformer implements ResponseTransformer {
     public String render(Object model) {
         return gson.toJson(model);
     }
+    public static <T extends Object> List<T> listFromJson(String json, Class<T> tClass) {
+        json = json.substring(1, json.length()-2);
+        System.out.println(json);
+        List<T> list = new ArrayList<>();
+        String[] jsonObjects = json.split("},");
+        for (String obj : jsonObjects) {
+            obj += "}";
+            list.add(fromJson(obj, tClass));
+        }
+        return list;
 
+    }
     public static <T extends Object> T  fromJson(String json, Class<T> classe) {
         return gson.fromJson(json, classe);
     }

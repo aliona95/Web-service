@@ -17,7 +17,9 @@ public class Person {
         this.address = address;
         this.companyId = companyId;
     }
+    Person(){
 
+    }
     // setters
     public void setId(int id){
         this.id = id;

@@ -3,9 +3,10 @@
  */
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import spark.Request;
 import spark.Response;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.io.DataOutputStream;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
@@ -37,19 +39,47 @@ public class Controller {
             if(person == null){
                 throw new Exception("Su tokiu id asmens nera");
             }
-            return person;
+            FinalJson json = new FinalJson();
+            String company = getCompanyData("http://company:80/companies/" + request.params("id"));
+ 	    JsonObject jsonObject = new JsonParser().parse(company).getAsJsonObject();
+            String companyName = jsonObject.get("name").getAsString();
+            String companyCity =  jsonObject.get("city").getAsString();
+            String companyNumber = jsonObject.get("phoneNumber").getAsString();
+            json.id = person.getId();
+            json.name = person.getName();
+            json.surname = person.getSurname();
+            json.gender = person.getGender();
+            json.address = person.getAddress();
+            json.companyName = companyName;
+            json.companyCity = companyCity;
+            json.companyNumber = companyNumber;
+            return json;
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
             return new ErrorMessage("Nepavyko rasti vartotojo su id: "  + request.params("id"));
         }
     }
-    public static Object addPerson(Request request, Response response, Data data){
+    public static Object addPerson(Request request, Response response, Data data) throws Exception{
         Person person = JsonTransformer.fromJson(request.body(), Person.class);
         int id = person.getId();
         if(id == 0){
             if (data.isPersonValid(person)) {
+                int companyId = person.getCompanyId();
+                List<Company> companies = JsonTransformer.listFromJson(HttpConnectionHandler.sendGet("http://company:80/companies")+"", Company.class);
+                boolean founded = false;
+
+                for (Company c :companies){
+		        if (c.getId() == companyId){
+		            founded = true;
+		            break;
+		        }
+
+                }
+                if (!founded){
+                        response.status(HTTP_NOT_FOUND);
+                	return new ErrorMessage("Nerasta imone su id: " + companyId);
+                }
                 data.addPerson(person);
-                response.header("PATH","/people/" + person.getId());
                 return "Sekmingai prideta";
             }
             response.status(HTTP_BAD_REQUEST);
@@ -58,7 +88,6 @@ public class Controller {
             response.status(HTTP_BAD_REQUEST);
             return new ErrorMessage("Nurodete id");
         }
-
     }
 
     public static Object deletePerson(Request request, Response response, Data data){
@@ -169,5 +198,25 @@ public class Controller {
             response.status(HTTP_NOT_FOUND);
             return new ErrorMessage("Nerasta imone su id " + request.params("id"));
         }
+    }
+    public static Object createCompany(Request request, Response response, Data data) {
+        try {
+            ///int companyId = Integer.valueOf(request.params("id"));
+            return HttpConnectionHandler.sendPost("http://company:80/companies", request.body());
+        } catch (Exception e) {
+            response.status(HTTP_NOT_FOUND);
+            return new ErrorMessage("Ivyko klaida");
+        }
+    }
+    static class FinalJson{
+	int id;
+        String name;
+        String surname;
+        String gender;
+        String address;
+        int companyId;
+        String companyName;
+        String companyCity;
+        String companyNumber; 
     }
 }

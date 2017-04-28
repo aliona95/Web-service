@@ -1,6 +1,15 @@
 # Asmenu web servisas
+
+## Antra užduotis
+
+### Norint paleisti abu servisus, reikia paleisti komandas:
+
+docker-compose.yml 
+
+docker-compose up -d
+
 ## Pirma užduotis
-### Norint paleisti servisa, reikia paleisti komandas:
+### Norint paleisti servisą, reikia paleisti komandas:
 
 docker build -t people:1 .
 

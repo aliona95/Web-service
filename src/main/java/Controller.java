@@ -134,7 +134,7 @@ public class Controller {
             if(person == null){
                 throw new Exception("Nerasta asmens");
             }
-	    String company = getCompanyData("http://172.17.0.3:80/companies/" +companyId);
+	    String company = getCompanyData("http://company:80/companies/" +companyId);
             return company;
 
         }catch(Exception e){

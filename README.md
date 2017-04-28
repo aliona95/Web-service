@@ -32,6 +32,8 @@ docker run -d -p 80:4321 eima1995/people:1
 
 /people/{id}/company GET
 
+/people/company/{id} GET
+
 # Pavyzdiniai duomenys
 {
 

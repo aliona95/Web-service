@@ -1,4 +1,4 @@
-# Asmenu web servisas
+# Asmenų web servisas
 
 ## Antra užduotis
 

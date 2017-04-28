@@ -43,7 +43,9 @@ docker run -d -p 80:4321 eima1995/people:1
    
       "gender":"male",
    
-      "address":"Ikalnes 45"
+      "address":"Ikalnes 45",
+      
+      "companyId":5
    
 }
 

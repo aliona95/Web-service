@@ -1,11 +1,12 @@
 # Asmenu web servisas
-Norint paleisti servisa, reikia paleisti komandas:
+## Pirma užduotis
+### Norint paleisti servisa, reikia paleisti komandas:
 
 docker build -t people:1 .
 
 docker run -d -p 80:4321 people:1
 
-DockerHub'e:
+### DockerHub'e:
 
 docker pull eima1995/people:1
 

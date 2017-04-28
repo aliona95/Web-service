@@ -1,11 +1,21 @@
-# Asmenu web servisas
-Norint paleisti servisa, reikia paleisti komandas:
+# Asmenų web servisas
+
+## Antra užduotis
+
+### Norint paleisti abu servisus, reikia paleisti komandas:
+
+docker-compose.yml 
+
+docker-compose up -d
+
+## Pirma užduotis
+### Norint paleisti servisą, reikia paleisti komandas:
 
 docker build -t people:1 .
 
 docker run -d -p 80:4321 people:1
 
-DockerHub'e:
+### DockerHub'e:
 
 docker pull eima1995/people:1
 
@@ -20,6 +30,10 @@ docker run -d -p 80:4321 eima1995/people:1
 
 /people/gender//{gender} GET
 
+/people/{id}/company GET
+
+/people/company/{id} GET
+
 # Pavyzdiniai duomenys
 {
 
@@ -31,7 +45,9 @@ docker run -d -p 80:4321 eima1995/people:1
    
       "gender":"male",
    
-      "address":"Ikalnes 45"
+      "address":"Ikalnes 45",
+      
+      "companyId":5
    
 }
 

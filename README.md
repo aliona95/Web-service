@@ -15,7 +15,12 @@ docker-compose.yml
 ```
 docker-compose up -d
 ```
+### Naujos komandos:
 
+```
+/people/{id}/company GET
+/people/company/{id} GET
+```
 ## Pirma užduotis
 
 ### Norint paleisti servisą, reikia paleisti komandas:
@@ -38,33 +43,20 @@ docker run -d -p 80:4321 eima1995/people:1
 
 ```
 /people GET, POST
-
 /people/{id} GET, PUT, DELETE
-
 /people/name//{name} GET
-
 /people/gender//{gender} GET
 
-/people/{id}/company GET
-
-/people/company/{id} GET
 ```
 
 # Pavyzdiniai duomenys
 ```
 {
-
       "id":1,
-   
       "name":"Petras",
-   
       "surname":"Petraitis",
-   
       "gender":"male",
-   
       "address":"Ikalnes 45",
-      
       "companyId":5
-   
 }
 ```

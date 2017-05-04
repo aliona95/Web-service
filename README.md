@@ -6,28 +6,37 @@
 
 #### 1. Atsisiųsti failą:
 
-docker-compose.yml 
+```
+...docker-compose.yml 
+```
 
 #### 2. Paleisti komandą:
 
-docker-compose up -d
+```
+...docker-compose up -d
+```
 
 ## Pirma užduotis
 
 ### Norint paleisti servisą, reikia paleisti komandas:
 
+```
 docker build -t people:1 .
 
 docker run -d -p 80:4321 people:1
+```
 
 ### DockerHub'e:
 
+```
 docker pull eima1995/people:1
 
 docker run -d -p 80:4321 eima1995/people:1
+```
 
 # Komandos
 
+```
 /people GET, POST
 
 /people/{id} GET, PUT, DELETE
@@ -39,6 +48,7 @@ docker run -d -p 80:4321 eima1995/people:1
 /people/{id}/company GET
 
 /people/company/{id} GET
+```
 
 # Pavyzdiniai duomenys
 {

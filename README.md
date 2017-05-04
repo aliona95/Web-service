@@ -22,6 +22,7 @@ docker-compose up -d
 /people/{id}/company GET
 /people/company/{id} GET
 /people/company POST
+/people/company/{id} PUT
 ```
 ### Pavyzdiniai duomenys
 ```
@@ -60,7 +61,6 @@ docker run -d -p 80:4321 eima1995/people:1
 /people/{id} GET, PUT, DELETE
 /people/name//{name} GET
 /people/gender//{gender} GET
-
 ```
 
 ### Pavyzdiniai duomenys

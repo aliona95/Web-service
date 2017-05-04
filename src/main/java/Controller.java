@@ -24,8 +24,8 @@ import static spark.Spark.get;
 import static spark.Spark.path;
 
 public class Controller {
-    //public static String url = "http://192.168.99.100:80";
-    public static String url = "http://company:80";
+    public static String url = "http://192.168.99.100:80";
+    //public static String url = "http://company:80";
     public static Object getAllPeople(Request request, Response response, Data data){
         List<Person> people = data.getAll();
         if(people.size() == 0){
@@ -284,6 +284,25 @@ public class Controller {
             return new ErrorMessage("Nepavyko prisijungti");
         }
     }
+    public static Object updateCompany(Request request, Response response, Data data) {
+        try{
+            //Company company = JsonTransformer.fromJson(request.body(), Company.class);
+            URL url1 = new URL(url + "/companies/" + request.params("id"));
+            HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
+            conn.setRequestMethod("PUT");
+            conn.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+            wr.writeBytes(request.body());
+            wr.flush();
+            wr.close();
+            getServiceResponse(conn);
+            return "Sekmingai atnaujinta";
+        }catch (Exception e){
+            response.status(HTTP_NOT_FOUND);
+            return new ErrorMessage("Nepavyko prisijungti");
+        }
+
+    }
     public static Object getCompanies(Request request, Response response, Data data) {
         try {
             List<Company> company = new ArrayList<Company>();
@@ -308,5 +327,15 @@ public class Controller {
         String companyCity;
         String companyNumber;
          */
+    }
+    public static void getServiceResponse(HttpURLConnection conn) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader( conn.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null){
+            response.append(inputLine);
+        }
+        in.close();
     }
 }

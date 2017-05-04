@@ -13,6 +13,7 @@ public class Main {
         port(81);
 
         path("/people", () -> {
+
             get("", (req, res) -> {
                 return Controller.getAllPeople(req, res, data);
             } , new JsonTransformer());
@@ -48,8 +49,13 @@ public class Main {
             post("/company", (req, res) -> {
                 return Controller.createCompany(req, res, data);
             }, new JsonTransformer());
+
             put("/:id", (req, res) -> {
                 return Controller.updatePerson(req, res, data);
+            } , new JsonTransformer());
+
+            put("/company/:id", (req, res) -> {
+                return Controller.updateCompany(req, res, data);
             } , new JsonTransformer());
 
             delete("/:id", (req, res) -> {

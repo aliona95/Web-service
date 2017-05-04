@@ -24,7 +24,8 @@ import static spark.Spark.get;
 import static spark.Spark.path;
 
 public class Controller {
-
+    //public static String url = "http://192.168.99.100:80";
+    public static String url = "http://company:80";
     public static Object getAllPeople(Request request, Response response, Data data){
         List<Person> people = data.getAll();
         if(people.size() == 0){
@@ -47,7 +48,7 @@ public class Controller {
             for(int i = 0; i < companyId.length; i++) {
                 Company temp = new Company();
                 try{
-                    comp = getCompanyData("http://192.168.99.100:80/companies/" + companyId[i]);
+                    comp = getCompanyData(url + "/companies/" + companyId[i]);
                 }catch (Exception e){
                     return person;
                 }
@@ -89,7 +90,7 @@ public class Controller {
                 int[] companyId = person.getCompanyId();
                 List<Company> companies = new ArrayList<Company>();
                 try{
-                    companies = JsonTransformer.listFromJson(HttpConnectionHandler.sendGet("http://192.168.99.100:80/companies")+"", Company.class);
+                    companies = JsonTransformer.listFromJson(HttpConnectionHandler.sendGet(url + "/companies")+"", Company.class);
                 }catch (Exception e){
                     int[] compId = {-1};
                     person.setCompanyId(compId);
@@ -149,8 +150,35 @@ public class Controller {
                     throw new Exception("Nepavyko rasti vartotojo su id");
                 }
                 if (data.isPersonValid(person)){
+                    int[] companyId = person.getCompanyId();
+                    List<Company> companies = new ArrayList<Company>();
+                    try{
+                        companies = JsonTransformer.listFromJson(HttpConnectionHandler.sendGet(url + "/companies")+"", Company.class);
+                    }catch (Exception e){
+                        int[] compId = {-1};
+                        person.setCompanyId(compId);
+                        data.addPerson(person);
+                        return "Sekmingai atnaujinta";
+                    }
+
+                    boolean founded = false;
+                    int index = 0;
+                    for(int i = 0; i < companyId.length; i++) {
+                        index = i;
+                        for (Company c :companies) {
+                            if(c.getId() == companyId[i]) {
+                                founded = true;
+                            }
+                        }
+                        if(!founded){
+                            response.status(HTTP_NOT_FOUND);
+                            return new ErrorMessage("Nerasta imone su id: " + companyId[index]);
+                        }else{
+                            founded = false;
+                        }
+                    }
                     data.update(id, person);
-                    return "Sekmingai atnaujintas";
+                    return "Sekmingai atnaujinta";
                 }
                 response.status(HTTP_BAD_REQUEST);
                 return new ErrorMessage("Truksta " + data.personMissedFields(person));
@@ -198,16 +226,19 @@ public class Controller {
                 throw new Exception("Nerasta asmens");
             }
             int [] companyId = person.getCompanyId();
-
-            String comp = "";
-            List<Company> company = new ArrayList<Company>();
-            for(int i = 0; i < companyId.length; i++) {
-                Company temp = new Company();
-                comp = getCompanyData("http://192.168.99.100:80/companies/" + companyId[i]);
-                temp = JsonTransformer.fromJson(comp, Company.class);
-                company.add(temp);
+            try{
+                String comp = "";
+                List<Company> company = new ArrayList<Company>();
+                for(int i = 0; i < companyId.length; i++) {
+                    Company temp = new Company();
+                    comp = getCompanyData(url + "/companies/" + companyId[i]);
+                    temp = JsonTransformer.fromJson(comp, Company.class);
+                    company.add(temp);
+                }
+                return company;
+            }catch (Exception e){
+                return person.getCompanyId();
             }
-            return company;
         }catch(Exception e){
             response.status(HTTP_NOT_FOUND);
             return new ErrorMessage("Nerasta asmens su id " + request.params("id"));
@@ -243,15 +274,24 @@ public class Controller {
     }
     public static Object createCompany(Request request, Response response, Data data) {
         try {
-            Object obj = HttpConnectionHandler.sendPost("http://192.168.99.100:80/companies", request.body());
+            Object obj = HttpConnectionHandler.sendPost(url + "/companies", request.body());
             ///int companyId = Integer.valueOf(request.params("id"));
             Company company = JsonTransformer.fromJson(request.body(), Company.class);
-            response.header("PATH","/company/" + company.getId());
+            response.header("PATH","/company/" + company.getId()); ////Su id pataisyt!!!
             return obj;
         } catch (Exception e) {
             response.status(HTTP_NOT_FOUND);
-            System.out.println("AS CIA");
-            return new ErrorMessage("Ivyko klaida");
+            return new ErrorMessage("Nepavyko prisijungti");
+        }
+    }
+    public static Object getCompanies(Request request, Response response, Data data) {
+        try {
+            List<Company> company = new ArrayList<Company>();
+            company = JsonTransformer.listFromJson(HttpConnectionHandler.sendGet(url + "/companies")+"", Company.class);
+            return company;
+        } catch (Exception e) {
+            response.status(HTTP_NOT_FOUND);
+            return new ErrorMessage("Nepavyko prisijungti");
         }
     }
     static class FinalJson{

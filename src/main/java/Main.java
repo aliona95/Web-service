@@ -17,6 +17,10 @@ public class Main {
                 return Controller.getAllPeople(req, res, data);
             } , new JsonTransformer());
 
+            get("/companies", (req, res) -> {
+                return Controller.getCompanies(req, res, data);
+            } , new JsonTransformer());
+
             get("/:id", (req, res) -> {
                 return Controller.getPerson(req, res, data);
             } , new JsonTransformer());
@@ -43,7 +47,7 @@ public class Main {
 
             post("/company", (req, res) -> {
                 return Controller.createCompany(req, res, data);
-            });
+            }, new JsonTransformer());
             put("/:id", (req, res) -> {
                 return Controller.updatePerson(req, res, data);
             } , new JsonTransformer());

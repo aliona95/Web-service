@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.DataOutputStream;
 
@@ -40,8 +41,27 @@ public class Controller {
                 throw new Exception("Su tokiu id asmens nera");
             }
             FinalJson json = new FinalJson();
-            String company = getCompanyData("http://company:80/companies/" + request.params("id"));
- 	    JsonObject jsonObject = new JsonParser().parse(company).getAsJsonObject();
+            int [] companyId = person.getCompanyId();
+            String comp = "";
+            List<Company> company = new ArrayList<Company>();
+            for(int i = 0; i < companyId.length; i++) {
+                Company temp = new Company();
+                try{
+                    comp = getCompanyData("http://192.168.99.100:80/companies/" + companyId[i]);
+                }catch (Exception e){
+                    return person;
+                }
+                temp = JsonTransformer.fromJson(comp, Company.class);
+                company.add(temp);
+            }
+                json.person = person;
+                json.companies = company;
+                return json;
+
+            /*
+            FinalJson json = new FinalJson();
+            String company = getCompanyData("http://192.168.99.100:80/companies/" + request.params("id"));
+ 	        JsonObject jsonObject = new JsonParser().parse(company).getAsJsonObject();
             String companyName = jsonObject.get("name").getAsString();
             String companyCity =  jsonObject.get("city").getAsString();
             String companyNumber = jsonObject.get("phoneNumber").getAsString();
@@ -53,7 +73,8 @@ public class Controller {
             json.companyName = companyName;
             json.companyCity = companyCity;
             json.companyNumber = companyNumber;
-            return json;
+            return json;*/
+
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
             return new ErrorMessage("Nepavyko rasti vartotojo su id: "  + request.params("id"));
@@ -62,22 +83,35 @@ public class Controller {
     public static Object addPerson(Request request, Response response, Data data) throws Exception{
         Person person = JsonTransformer.fromJson(request.body(), Person.class);
         int id = person.getId();
+        response.header("PATH","/people/" + person.getId());
         if(id == 0){
             if (data.isPersonValid(person)) {
-                int companyId = person.getCompanyId();
-                List<Company> companies = JsonTransformer.listFromJson(HttpConnectionHandler.sendGet("http://company:80/companies")+"", Company.class);
-                boolean founded = false;
-
-                for (Company c :companies){
-		        if (c.getId() == companyId){
-		            founded = true;
-		            break;
-		        }
-
+                int[] companyId = person.getCompanyId();
+                List<Company> companies = new ArrayList<Company>();
+                try{
+                    companies = JsonTransformer.listFromJson(HttpConnectionHandler.sendGet("http://192.168.99.100:80/companies")+"", Company.class);
+                }catch (Exception e){
+                    int[] compId = {-1};
+                    person.setCompanyId(compId);
+                    data.addPerson(person);
+                    return "Sekmingai prideta";
                 }
-                if (!founded){
+
+                boolean founded = false;
+                int index = 0;
+                for(int i = 0; i < companyId.length; i++) {
+                    index = i;
+                    for (Company c :companies) {
+                        if(c.getId() == companyId[i]) {
+                            founded = true;
+                        }
+                    }
+                    if(!founded){
                         response.status(HTTP_NOT_FOUND);
-                	return new ErrorMessage("Nerasta imone su id: " + companyId);
+                        return new ErrorMessage("Nerasta imone su id: " + companyId[index]);
+                    }else{
+                        founded = false;
+                    }
                 }
                 data.addPerson(person);
                 return "Sekmingai prideta";
@@ -158,14 +192,22 @@ public class Controller {
     public static Object getPersonCompany(Request request, Response response, Data data){
         try{
             int id = Integer.valueOf(request.params("id"));
-            Person person = data.getCompany(id);
-            int companyId = person.getCompanyId();
+            Person person = data.get(id);
+
             if(person == null){
                 throw new Exception("Nerasta asmens");
             }
-	    String company = getCompanyData("http://company:80/companies/" +companyId);
-            return company;
+            int [] companyId = person.getCompanyId();
 
+            String comp = "";
+            List<Company> company = new ArrayList<Company>();
+            for(int i = 0; i < companyId.length; i++) {
+                Company temp = new Company();
+                comp = getCompanyData("http://192.168.99.100:80/companies/" + companyId[i]);
+                temp = JsonTransformer.fromJson(comp, Company.class);
+                company.add(temp);
+            }
+            return company;
         }catch(Exception e){
             response.status(HTTP_NOT_FOUND);
             return new ErrorMessage("Nerasta asmens su id " + request.params("id"));
@@ -174,9 +216,9 @@ public class Controller {
 
     private static String getCompanyData(String urlToRead) throws IOException {
         StringBuilder result = new StringBuilder();
-	URL url = new URL(urlToRead);
-	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	conn.setRequestMethod("GET");
+        URL url = new URL(urlToRead);
+	    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	    conn.setRequestMethod("GET");
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String line;
 		while ((line = rd.readLine()) != null) {
@@ -201,22 +243,30 @@ public class Controller {
     }
     public static Object createCompany(Request request, Response response, Data data) {
         try {
+            Object obj = HttpConnectionHandler.sendPost("http://192.168.99.100:80/companies", request.body());
             ///int companyId = Integer.valueOf(request.params("id"));
-            return HttpConnectionHandler.sendPost("http://company:80/companies", request.body());
+            Company company = JsonTransformer.fromJson(request.body(), Company.class);
+            response.header("PATH","/company/" + company.getId());
+            return obj;
         } catch (Exception e) {
             response.status(HTTP_NOT_FOUND);
+            System.out.println("AS CIA");
             return new ErrorMessage("Ivyko klaida");
         }
     }
     static class FinalJson{
-	int id;
+	  /*  int id;
         String name;
         String surname;
         String gender;
         String address;
-        int companyId;
+        int [] companyId;*/
+	    Person person;
+        List<Company> companies;
+        /*
         String companyName;
         String companyCity;
-        String companyNumber; 
+        String companyNumber;
+         */
     }
 }

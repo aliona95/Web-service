@@ -4,7 +4,7 @@ services:
   people:
     image: "eima1995/people:2"
     ports:
-      - 4321:81
+      - 81:81
   company:
     image: "zenka/webservice:1"
     ports:

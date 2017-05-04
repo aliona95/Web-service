@@ -2,13 +2,18 @@
 
 ## Antra užduotis
 
-### Norint paleisti abu servisus, reikia paleisti komandas:
+### Norint paleisti abu servisus:
+
+#### 1. Atsisiųsti failą:
 
 docker-compose.yml 
+
+#### 2. Paleisti komandą:
 
 docker-compose up -d
 
 ## Pirma užduotis
+
 ### Norint paleisti servisą, reikia paleisti komandas:
 
 docker build -t people:1 .
@@ -22,6 +27,7 @@ docker pull eima1995/people:1
 docker run -d -p 80:4321 eima1995/people:1
 
 # Komandos
+
 /people GET, POST
 
 /people/{id} GET, PUT, DELETE

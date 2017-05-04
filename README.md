@@ -18,9 +18,23 @@ docker-compose up -d
 ### Naujos komandos:
 
 ```
+/people/companies GET
 /people/{id}/company GET
 /people/company/{id} GET
+/people/company POST
 ```
+### Pavyzdiniai duomenys
+```
+{
+      "id":1,
+      "name":"Petras",
+      "surname":"Petraitis",
+      "gender":"male",
+      "address":"Ikalnes 45",
+      "companyId":[5,1]
+}
+```
+
 ## Pirma užduotis
 
 ### Norint paleisti servisą, reikia paleisti komandas:
@@ -39,7 +53,7 @@ docker pull eima1995/people:1
 docker run -d -p 80:4321 eima1995/people:1
 ```
 
-# Komandos
+### Komandos
 
 ```
 /people GET, POST
@@ -49,14 +63,13 @@ docker run -d -p 80:4321 eima1995/people:1
 
 ```
 
-# Pavyzdiniai duomenys
+### Pavyzdiniai duomenys
 ```
 {
       "id":1,
       "name":"Petras",
       "surname":"Petraitis",
       "gender":"male",
-      "address":"Ikalnes 45",
-      "companyId":5
+      "address":"Ikalnes 45"
 }
 ```

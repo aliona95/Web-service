@@ -8,6 +8,6 @@ RUN ["mvn", "verify"]
 COPY src /code/src
 RUN ["mvn", "package"]
 
-EXPOSE 81
+EXPOSE 80
 CMD ["java", "-jar", "target/people-1.0-jar-with-dependencies.jar"]
 

@@ -4,10 +4,10 @@ services:
   people:
     image: "eima1995/people:2"
     ports:
-      - 81:81
+      - 80:80
   company:
     image: "zenka/webservice:1"
     ports:
-      - 80:80
+      - 81:81
     depends_on:
       - people

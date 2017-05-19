@@ -29,7 +29,7 @@ public class Controller {
     public static String url1 = "http://controller:80/people";
     public static Object getAllPeople(Request request, Response response, Data data){
         try{
-            getCompanyData(url);
+            getCompanyData(url1);
             List<Person> people = data.getAll();
             if(people.size() == 0) {
                 response.status(HTTP_NOT_FOUND);

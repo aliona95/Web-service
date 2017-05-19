@@ -24,9 +24,15 @@ docker-compose up -d
 /register
 
 {
-      "username": "eimantas",
-      "password": "eima123",
+      "username": "petras",
+      "password": "petras123",
       "permissions": "admin"
+}
+
+{
+      "username": "marius",
+      "password": "marius123",
+      "permissions": "user"
 }
 ```
 
@@ -36,8 +42,8 @@ docker-compose up -d
 /login
 
 {
-      "username": "aliona",
-      "password": "aliona123"
+      "username": "eimantas",
+      "password": "eimantas123"
 }
 ```
 

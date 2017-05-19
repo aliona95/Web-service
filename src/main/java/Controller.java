@@ -25,14 +25,20 @@ import static spark.Spark.path;
 
 public class Controller {
     public static String url = "http://192.168.99.100:80";
-    //public static String url = "http://company:80";
+    public static String url1 = "http://controller:80";
     public static Object getAllPeople(Request request, Response response, Data data){
-        List<Person> people = data.getAll();
-        if(people.size() == 0){
+        try{
+            getCompanyData(url);
+            List<Person> people = data.getAll();
+            if(people.size() == 0) {
+                response.status(HTTP_NOT_FOUND);
+                return "Asmenu nera";
+            }
+            return people;
+        }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
-            return "Asmenu nera";
+            return new ErrorMessage("Nepavyko prisijungti");
         }
-        return people;
     }
 
     public static Object getPerson(Request request, Response response, Data data){

@@ -10,8 +10,8 @@ services:
     ports:
      - 444:80
   company:
-    image: company:
-           image: "zenka/webservice:1"
+    image: "zenka/webservice:1"
+           
     ports:
       - 5321:81
     depends_on:

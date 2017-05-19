@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  controller:
+    image: "eima1995/controller:3"
+    ports:
+     - 80:888
+  people:
+    image: "eima1995/people:2"
+    ports:
+     - 444:80
+  company:
+    image: company:
+           image: "zenka/webservice:1"
+    ports:
+      - 5321:81
+    depends_on:
+      - people

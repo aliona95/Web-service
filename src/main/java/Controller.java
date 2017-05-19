@@ -24,7 +24,8 @@ import static spark.Spark.get;
 import static spark.Spark.path;
 
 public class Controller {
-    public static String url = "http://192.168.99.100:80";
+    //public static String url = "http://192.168.99.100:80";
+    public static String url = "http://company:80";
     public static String url1 = "http://controller:80/people";
     public static Object getAllPeople(Request request, Response response, Data data){
         try{

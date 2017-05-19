@@ -18,6 +18,29 @@ docker-compose.yml
 docker-compose up -d
 ```
 
+### Registracija
+
+```
+/register
+
+{
+      "username": "eimantas",
+      "password": "eima123",
+      "permissions": "admin"
+}
+```
+
+### Prisijungimas
+
+```
+/login
+
+{
+      "username": "aliona",
+      "password": "aliona123"
+}
+```
+
 ## Antra užduotis
 
 ### Norint paleisti abu servisus:

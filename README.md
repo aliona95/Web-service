@@ -1,5 +1,23 @@
 # Asmenų web servisas
 
+## Trečia užduotis
+
+### Norint paleisti
+
+#### 1. Nueiti į aplanką task3
+
+#### 2. Atsiųsti failą:
+
+```
+docker-compose.yml 
+```
+
+#### 3. Paleisti komandą:
+
+```
+docker-compose up -d
+```
+
 ## Antra užduotis
 
 ### Norint paleisti abu servisus:

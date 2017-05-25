@@ -72,7 +72,6 @@ docker-compose up -d
 ### Pavyzdiniai duomenys
 ```
 {
-      "id":1,
       "name":"Petras",
       "surname":"Petraitis",
       "gender":"male",
@@ -111,7 +110,6 @@ docker run -d -p 80:4321 eima1995/people:1
 ### Pavyzdiniai duomenys
 ```
 {
-      "id":1,
       "name":"Petras",
       "surname":"Petraitis",
       "gender":"male",

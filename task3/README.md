@@ -4,15 +4,13 @@
 
 ### Norint paleisti
 
-#### 1. Nueiti į aplanką task3
-
-#### 2. Atsiųsti failą:
+#### 1. Atsiųsti failą:
 
 ```
 docker-compose.yml 
 ```
 
-#### 3. Paleisti komandą:
+#### 2. Paleisti komandą:
 
 ```
 docker-compose up -d

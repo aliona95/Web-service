@@ -2,7 +2,7 @@ version: '2'
 
 services:
   people:
-    image: "eima1995/antra:1"
+    image: "eima1995/antra:2"
     ports:
       - 80:80
   company:

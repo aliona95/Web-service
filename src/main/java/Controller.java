@@ -26,23 +26,10 @@ import static spark.Spark.path;
 public class Controller {
     //public static String url = "http://192.168.99.100:80";
     public static String url = "http://company:80";
-<<<<<<< HEAD
+    //public static String url = "http://localhost:80";
     public static Object getAllPeople(Request request, Response response, Data data){
         List<Person> people = data.getAll();
         if(people.size() == 0){
-=======
-    public static String url1 = "http://controller:80/people";
-    public static Object getAllPeople(Request request, Response response, Data data){
-        try{
-            getCompanyData(url1);
-            List<Person> people = data.getAll();
-            if(people.size() == 0) {
-                response.status(HTTP_NOT_FOUND);
-                return "Asmenu nera";
-            }
-            return people;
-        }catch (Exception e){
->>>>>>> f4b453dcb33143122927e3b10fee904b7ed1a963
             response.status(HTTP_NOT_FOUND);
             return "Asmenu nera";
         }
@@ -53,7 +40,8 @@ public class Controller {
         try {
             Person person = data.get(Integer.valueOf(request.params("id")));
             if(person == null){
-                throw new Exception("Su tokiu id asmens nera");
+                response.status(HTTP_NOT_FOUND);
+                return "Su tokiu id asmens nera";
             }
             FinalJson json = new FinalJson();
             int [] companyId = person.getCompanyId();
@@ -92,7 +80,8 @@ public class Controller {
 
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
-            return new ErrorMessage("Nepavyko rasti vartotojo su id: "  + request.params("id"));
+            return "Nepavyko rasti vartotojo su id: "  + request.params("id");
+            //return new ErrorMessage("Nepavyko rasti vartotojo su id: "  + request.params("id"));
         }
     }
     public static Object addPerson(Request request, Response response, Data data) throws Exception{
@@ -109,7 +98,7 @@ public class Controller {
                     int[] compId = {-1};
                     person.setCompanyId(compId);
                     data.addPerson(person);
-                    return "Sekmingai prideta";
+                    return "Successfully added";
                 }
 
                 boolean founded = false;
@@ -123,19 +112,22 @@ public class Controller {
                     }
                     if(!founded){
                         response.status(HTTP_NOT_FOUND);
-                        return new ErrorMessage("Nerasta imone su id: " + companyId[index]);
+                        return "Nerasta imone su id: " + companyId[index];
+                        //return new ErrorMessage("Nerasta imone su id: " + companyId[index]);
                     }else{
                         founded = false;
                     }
                 }
                 data.addPerson(person);
-                return "Sekmingai prideta";
+                return "Successfully added";
             }
             response.status(HTTP_BAD_REQUEST);
-            return new ErrorMessage("Truksta " + data.personMissedFields(person));
+            return "Truksta " + data.personMissedFields(person);
+            //return new ErrorMessage("Truksta " + data.personMissedFields(person));
         }else{
             response.status(HTTP_BAD_REQUEST);
-            return new ErrorMessage("Nurodete id");
+            return "Nurodete id";
+            //return new ErrorMessage("Nurodete id");
         }
     }
 
@@ -145,10 +137,11 @@ public class Controller {
                 throw new Exception("Nepavyko rasti vartotojo su id");
             }
             data.removePerson(Integer.valueOf(request.params("id")));
-            return "Asmuo sekmingai istrintas";
+            return "Successfully deleted";
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
-            return  new ErrorMessage("Nepavyko rasti vartotojo su id: " + request.params("id"));
+            return "Nepavyko rasti vartotojo su id: " + request.params("id");
+            //return  new ErrorMessage("Nepavyko rasti vartotojo su id: " + request.params("id"));
         }
     }
 
@@ -172,7 +165,7 @@ public class Controller {
                         int[] compId = {-1};
                         person.setCompanyId(compId);
                         data.addPerson(person);
-                        return "Sekmingai atnaujinta";
+                        return "Successfully updated";
                     }
 
                     boolean founded = false;
@@ -186,19 +179,22 @@ public class Controller {
                         }
                         if(!founded){
                             response.status(HTTP_NOT_FOUND);
-                            return new ErrorMessage("Nerasta imone su id: " + companyId[index]);
+                            return "Nerasta imone su id: " + companyId[index];
+                            //return new ErrorMessage("Nerasta imone su id: " + companyId[index]);
                         }else{
                             founded = false;
                         }
                     }
                     data.update(id, person);
-                    return "Sekmingai atnaujinta";
+                    return "Successfully updated";
                 }
                 response.status(HTTP_BAD_REQUEST);
-                return new ErrorMessage("Truksta " + data.personMissedFields(person));
+                return "Truksta " + data.personMissedFields(person);
+                //return new ErrorMessage("Truksta " + data.personMissedFields(person));
             }else{
                 response.status(HTTP_BAD_REQUEST);
-                return new ErrorMessage("Nurodete id");
+                return "Nurodete id";
+                //return new ErrorMessage("Nurodete id");
             }
         } catch (Exception e) {
             if(notFound){
@@ -228,7 +224,8 @@ public class Controller {
             return people;
         }
         response.status(HTTP_BAD_REQUEST);
-        return new ErrorMessage("Klaidingai ivesta lytis");
+        return "Klaidingai ivesta lytis";
+        //return new ErrorMessage("Klaidingai ivesta lytis");
     }
 
     public static Object getPersonCompany(Request request, Response response, Data data){
@@ -255,7 +252,8 @@ public class Controller {
             }
         }catch(Exception e){
             response.status(HTTP_NOT_FOUND);
-            return new ErrorMessage("Nerasta asmens su id " + request.params("id"));
+            return "Nerasta asmens su id " + request.params("id");
+            //return new ErrorMessage("Nerasta asmens su id " + request.params("id"));
         }
     }
 
@@ -283,7 +281,8 @@ public class Controller {
             return people;
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
-            return new ErrorMessage("Nerasta imone su id " + request.params("id"));
+            return "Nerasta imone su id " + request.params("id");
+            //return new ErrorMessage("Nerasta imone su id " + request.params("id"));
         }
     }
     public static Object createCompany(Request request, Response response, Data data) {
@@ -295,7 +294,7 @@ public class Controller {
             return obj;
         } catch (Exception e) {
             response.status(HTTP_NOT_FOUND);
-            return new ErrorMessage("Nepavyko prisijungti");
+            return new ErrorMessage("Unable to connect");
         }
     }
     public static Object updateCompany(Request request, Response response, Data data) {
@@ -310,10 +309,10 @@ public class Controller {
             wr.flush();
             wr.close();
             getServiceResponse(conn);
-            return "Sekmingai atnaujinta";
+            return "Successfully updated";
         }catch (Exception e){
             response.status(HTTP_NOT_FOUND);
-            return new ErrorMessage("Nepavyko prisijungti");
+            return new ErrorMessage("Unable to connect");
         }
 
     }
@@ -324,7 +323,7 @@ public class Controller {
             return company;
         } catch (Exception e) {
             response.status(HTTP_NOT_FOUND);
-            return new ErrorMessage("Nepavyko prisijungti");
+            return new ErrorMessage("Unable to connect");
         }
     }
     static class FinalJson{

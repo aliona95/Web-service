@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Data data = new Data();
 
-        port(81);
+        port(80);
 
         path("/people", () -> {
 

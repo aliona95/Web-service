@@ -6,12 +6,11 @@ services:
     ports:
      - 80:888
   people:
-    image: "eima1995/people:2"
+    image: "eima1995/antra:1"
     ports:
      - 444:80
   company:
     image: "zenka/webservice:1"
-           
     ports:
       - 5321:81
     depends_on:

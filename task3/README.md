@@ -41,7 +41,7 @@ docker-compose up -d
 
 {
       "username": "eimantas",
-      "password": "eimantas123"
+      "password": "eima123"
 }
 ```
 

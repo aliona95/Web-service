@@ -69,7 +69,6 @@ docker-compose up -d
 /people/{id}/company GET
 /people/company/{id} GET
 /people/company POST
-/people/company/{id} PUT
 ```
 ### Pavyzdiniai duomenys
 ```

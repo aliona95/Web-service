@@ -35,13 +35,23 @@ docker-compose up -d
 ```
 
 ### Prisijungimas
-
+#### Administratoriaus
 ```
 /login
 
 {
       "username": "eimantas",
       "password": "eima123"
+}
+```
+
+#### Vartotojo
+```
+/login
+
+{
+      "username": "user",
+      "password": "user"
 }
 ```
 
